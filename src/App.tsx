@@ -1,7 +1,7 @@
 function App() {
   return (
     <>
-      <h1>MyCaps</h1>
+      <h1 className="text-3xl font-bold">MyCaps</h1>
     </>
   );
 }
