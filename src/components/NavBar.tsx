@@ -75,7 +75,7 @@ function NavBar() {
       >
         {capsLockPressed ? <CapsLockOn /> : <CapsLockOff />}
       </div>
-      <span className="font-bold">MyCaps - CapsLock Emulator</span>
+      <span className="font-bold text-sm md:text-xl">MyCaps - CapsLock Emulator</span>
       <div
         data-tooltip-id="tooltip"
         data-tooltip-content="GitHub Repository Link"
