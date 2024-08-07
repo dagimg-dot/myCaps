@@ -111,7 +111,7 @@ const CapsLockEmulator: React.FC<CapsLockEmulatorProps> = () => {
   };
 
   return (
-    <div className="p-4 max-w-md mx-auto">
+    <div className="p-4 max-w-4xl mx-auto">
       <Alert>
         <Keyboard className="h-4 w-4" />
         <AlertTitle>CapsLock Emulator</AlertTitle>
