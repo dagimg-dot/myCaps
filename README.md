@@ -1,30 +1,31 @@
-# React + TypeScript + Vite
+> # myCaps - CapsLock Remap Emulator
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Today I get up and choose violence 😁😁
 
-Currently, two official plugins are available:
+How often do you guys use your CapsLock? Not much right. I think its in the perfect position but its not giving the functionality it should give. So what did I do as a fellow programmer? I mapped it to more useful keys. Buckle up this is gonna be hard to accept😂😂.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Just hold CapsLock with your left hand pinky finger and see the magic happen.
 
-## Expanding the ESLint configuration
+- CapsLock + a -> Ctrl + a (Select all)
+- CapsLock + s -> Ctrl + x (Cut)
+- CapsLock + d -> Ctrl + c (Copy)
+- CapsLock + f -> Ctrl + v (Paste)
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+> See ☝🏿, [a,s,d,f] are the keys that your left hand rests on when you are touch typing. So I mapped them to the keys that a programmer needs most 🤣🤣.
 
-- Configure the top-level `parserOptions` property like this:
+- CapsLock + j -> Left Arrow
+- CapsLock + k -> Down Arrow
+- CapsLock + l -> Right Arrow
+- CapsLock + i -> Up Arrow
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json', './tsconfig.app.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+> See ☝🏿, [j,k,l] are the keys that your right hand rests on when you are touch typing. So I mapped them to the arrow keys. This is way more efficient than using the arrow keys with your right hand.
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+- CapsLock + n -> Backspace
+- CapsLock + m -> Delete
+
+> See ☝🏿, [n,m] are the keys you can easily reach with your right hand index finger. So I reach Backspace and Delete with my right hand. right?
+
+CapsLock + ,  -> Ctrl + z (Undo)
+CapsLock + .  -> Ctrl + y (Redo)
+
+> See ☝🏿, [,.] are the keys you can easily reach with your right hand middle finger. So no more Ctrl + z and Ctrl + y. I reach Undo and Redo with my right hand.
