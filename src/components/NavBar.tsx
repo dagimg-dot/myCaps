@@ -27,7 +27,7 @@ function NavBar() {
   }, []);
 
   return (
-    <div className="flex justify-between items-center h-16 px-5 text-white rounded-lg bg-opacity-30 bg-stone-800 backdrop-filter backdrop-blur-lg border-slate-300 border-2">
+    <div className="sticky md:absolute lg:absolute z-10 top-5 left-5 right-5 flex justify-between items-center h-16 px-5 text-white rounded-lg bg-opacity-30 bg-stone-800 backdrop-filter backdrop-blur-lg border-slate-300 border-2"> 
       <div
         data-tooltip-id="tooltip"
         data-tooltip-content={

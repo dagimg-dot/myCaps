@@ -9,8 +9,7 @@ const KeyCapture = () => {
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
       if (event.key === " ") {
-        event.preventDefault();
-        updateText(" Space "); 
+        updateText(" Space ");
       } else if (event.key.length === 1) {
         updateText(" " + event.key + " ");
       } else {
@@ -28,7 +27,7 @@ const KeyCapture = () => {
 
       timeoutRef.current = setTimeout(() => {
         setIsTyping(false);
-        setText((prevText) => prevText.slice(-15, prevText.length));
+        setText((prevText) => prevText.slice(-40, prevText.length));
       }, 2000);
     };
 
@@ -51,7 +50,7 @@ const KeyCapture = () => {
   return (
     <div
       ref={containerRef}
-      className="bg-slate-500 bg-opacity-20 p-2 rounded-lg w-1/5 h-16 text-2xl overflow-hidden whitespace-nowrap flex items-center justify-start"
+      className="bg-slate-600 bg-opacity-15 p-2 rounded-lg w-1/5 h-16 text-2xl overflow-hidden whitespace-nowrap flex items-center justify-start"
       data-tooltip-id="tooltip"
       data-tooltip-content="Key Capture"
     >

@@ -9,7 +9,7 @@ function Home({ children }: { children: React.ReactNode }) {
         backgroundSize: "cover",
         backgroundBlendMode: "overlay",
       }}
-      className="h-screen px-5 lg:px-10 mg:px-5 py-5 flex flex-col"
+      className="px-5 flex flex-col relative"
     >
       {children}
     </div>
