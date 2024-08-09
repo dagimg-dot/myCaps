@@ -5,7 +5,7 @@ function Home({ children }: { children: React.ReactNode }) {
     <div
       style={{
         backgroundImage:
-          "linear-gradient(to bottom, rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('/src/assets/bg.webp')",
+          "linear-gradient(to bottom, rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://i.postimg.cc/PNnx2kXJ/bg-1.webp')",
         backgroundSize: "cover",
         backgroundBlendMode: "overlay",
       }}
