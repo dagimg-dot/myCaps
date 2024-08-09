@@ -9,14 +9,13 @@ function App() {
   return (
     <>
       <Home>
-        {/* <CapsLockEmulator /> */}
         <NavBar />
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 pt-5 md:pt-20 lg:pt-20 pb-5 lg:h-screen">
           <Doc />
           <TextEditor />
         </div>
       </Home>
-      <Tooltip id="tooltip" />
+      <Tooltip id="tooltip" className="z-50" />
     </>
   );
 }
