@@ -19,9 +19,13 @@ function InputArea() {
         className="bg-transparent border-0 h-52 text-lg focus:outline-none placeholder:text-slate-300 placeholder:text-opacity-45"
         placeholder="Type something here..."
       />
-      <div className="mt-2 text-sm text-slate-300">
-        <p>CapsLock: {capsLockPressed ? "Pressed" : "Not Pressed"}</p>
-        <p>Last Action: {lastAction || "None"}</p>
+      <div>
+        <div className="text-xs text-slate-300 text-opacity-45">
+          {lastAction}
+        </div>
+        <div className="text-xs text-slate-300 text-opacity-45">
+          {capsLockPressed ? "Caps Lock is on" : "Caps Lock is off"}
+        </div>
       </div>
     </div>
   );
