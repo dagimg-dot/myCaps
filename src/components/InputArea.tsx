@@ -11,7 +11,7 @@ function InputArea() {
   }, []);
 
   return (
-    <div className="mt-10 bg-slate-600 bg-opacity-15 p-2 rounded-lg">
+    <div className="mt-10 bg-slate-600 bg-opacity-15 p-2 rounded-lg mb-20">
       <Textarea
         ref={textAreaRef}
         value={text}

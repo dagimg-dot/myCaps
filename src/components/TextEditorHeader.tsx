@@ -35,7 +35,7 @@ const TextEditorHeader = () => {
   };
 
   return (
-    <div className="flex space-x-4 justify-center">
+    <div className="flex space-x-4 justify-between md:justify-center lg:justify-center">
       <Button
         variant="outline"
         className={`${getButtonStyle(
