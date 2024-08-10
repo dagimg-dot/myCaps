@@ -1,80 +1,97 @@
-export type RemapAction =
-  | "Select All"
-  | "Cut"
-  | "Copy"
-  | "Paste"
-  | "Move Left"
-  | "Move Down"
-  | "Move Right"
-  | "Move Up"
-  | "Backspace"
-  | "Delete"
-  | "Undo"
-  | "Redo";
+import clipboard from "@/core/clipboard";
+
+export enum RemapAction {
+  SelectAll = "Select All",
+  Cut = "Cut",
+  Copy = "Copy",
+  Paste = "Paste",
+  MoveLeft = "Move Left",
+  MoveDown = "Move Down",
+  MoveRight = "Move Right",
+  MoveUp = "Move Up",
+  Backspace = "Backspace",
+  Delete = "Delete",
+  Undo = "Undo",
+  Redo = "Redo",
+}
 
 const remapActionMap: Record<string, RemapAction> = {
-  a: "Select All",
-  s: "Cut",
-  d: "Copy",
-  f: "Paste",
-  j: "Move Left",
-  k: "Move Down",
-  l: "Move Right",
-  i: "Move Up",
-  n: "Backspace",
-  m: "Delete",
-  ",": "Undo",
-  ".": "Redo",
+  a: RemapAction.SelectAll,
+  s: RemapAction.Cut,
+  d: RemapAction.Copy,
+  f: RemapAction.Paste,
+  j: RemapAction.MoveLeft,
+  k: RemapAction.MoveDown,
+  l: RemapAction.MoveRight,
+  i: RemapAction.MoveUp,
+  n: RemapAction.Backspace,
+  m: RemapAction.Delete,
+  ",": RemapAction.Undo,
+  ".": RemapAction.Redo,
 };
 
 export function performRemapAction(
   action: RemapAction,
   textareaElement: HTMLTextAreaElement,
+  setTextWithCursorPosition: (text: string, cursorPosition: number) => void,
   setText: (text: string) => void
 ): void {
   const { selectionStart, selectionEnd, value } = textareaElement;
 
   switch (action) {
-    case "Select All":
+    case RemapAction.SelectAll:
       textareaElement.select();
       break;
-    case "Cut":
+    case RemapAction.Cut:
+      clipboard.copy(value);
       document.execCommand("cut");
       break;
-    case "Copy":
-      document.execCommand("copy");
+    case RemapAction.Copy:
+      clipboard.copy(value);
       break;
-    case "Paste":
-      document.execCommand("paste");
+    case RemapAction.Paste: {
+      if (!clipboard.paste()) {
+        console.log("Nothing to paste");
+        return;
+      }
+      const newText =
+        value.slice(0, selectionStart) +
+        clipboard.paste() +
+        value.slice(selectionEnd);
+      setTextWithCursorPosition(
+        newText,
+        selectionStart + clipboard.paste()!.length
+      );
       break;
-    case "Move Left":
+    }
+    case RemapAction.MoveLeft:
       textareaElement.setSelectionRange(selectionStart - 1, selectionStart - 1);
       break;
-    case "Move Down":
-      // eslint-disable-next-line no-case-declarations
+    case RemapAction.MoveDown: {
       const nextLineStart = value.indexOf("\n", selectionEnd) + 1;
       textareaElement.setSelectionRange(nextLineStart, nextLineStart);
       break;
-    case "Move Right":
+    }
+    case RemapAction.MoveRight:
       textareaElement.setSelectionRange(selectionEnd + 1, selectionEnd + 1);
       break;
-    case "Move Up":
-      // eslint-disable-next-line no-case-declarations
+    case RemapAction.MoveUp: {
       const prevLineEnd = value.lastIndexOf("\n", selectionStart - 1);
       textareaElement.setSelectionRange(prevLineEnd + 1, prevLineEnd + 1);
       break;
-    case "Backspace":
+    }
+    case RemapAction.Backspace:
       setText(value.slice(0, selectionStart - 1) + value.slice(selectionEnd));
       textareaElement.setSelectionRange(selectionStart - 1, selectionStart - 1);
       break;
-    case "Delete":
+    case RemapAction.Delete:
       setText(value.slice(0, selectionStart) + value.slice(selectionEnd + 1));
       textareaElement.setSelectionRange(selectionStart, selectionStart);
       break;
-    case "Undo":
+    case RemapAction.Undo:
       document.execCommand("undo");
       break;
-    case "Redo":
+    case RemapAction.Redo:
       document.execCommand("redo");
       break;
   }
