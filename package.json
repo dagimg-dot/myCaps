@@ -19,7 +19,8 @@
     "react-scrollbars-custom": "^4.1.1",
     "react-tooltip": "^5.28.0",
     "tailwind-merge": "^2.4.0",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "zustand": "^4.5.4"
   },
   "devDependencies": {
     "@types/node": "^22.1.0",

@@ -1,9 +1,10 @@
 import { useState, useCallback, useEffect } from "react";
-import { performRemapAction, getRemapAction, RemapAction } from "@/core/remap";
+import { performRemapAction, getRemapAction } from "@/core/remap";
+import useGlobalStore from "@/store";
 
 export function useRemap(textareaRef: React.RefObject<HTMLTextAreaElement>) {
   const [capsLockPressed, setCapsLockPressed] = useState(false);
-  const [lastAction, setLastAction] = useState<RemapAction | null>(null);
+  const { updateLastAction } = useGlobalStore();
   const [text, setText] = useState("");
   const [cursorPosition, setCursorPosition] = useState<number | null>(null);
 
@@ -32,11 +33,11 @@ export function useRemap(textareaRef: React.RefObject<HTMLTextAreaElement>) {
             setTextWithCursorPosition,
             setText
           );
-          setLastAction(action);
+          updateLastAction(action);
         }
       }
     },
-    [capsLockPressed, textareaRef, setTextWithCursorPosition]
+    [capsLockPressed, textareaRef, setTextWithCursorPosition, updateLastAction]
   );
 
   const handleKeyUp = useCallback((e: KeyboardEvent) => {
@@ -67,6 +68,5 @@ export function useRemap(textareaRef: React.RefObject<HTMLTextAreaElement>) {
     setText,
     setTextWithCursorPosition,
     capsLockPressed,
-    lastAction,
   };
 }
