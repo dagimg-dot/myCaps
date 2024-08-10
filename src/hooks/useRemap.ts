@@ -5,6 +5,15 @@ export function useRemap(textareaRef: React.RefObject<HTMLTextAreaElement>) {
   const [capsLockPressed, setCapsLockPressed] = useState(false);
   const [lastAction, setLastAction] = useState<RemapAction | null>(null);
   const [text, setText] = useState("");
+  const [cursorPosition, setCursorPosition] = useState<number | null>(null);
+
+  const setTextWithCursorPosition = useCallback(
+    (text: string, cursorPosition: number) => {
+      setText(text);
+      setCursorPosition(cursorPosition);
+    },
+    [setText, setCursorPosition]
+  );
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
@@ -17,12 +26,17 @@ export function useRemap(textareaRef: React.RefObject<HTMLTextAreaElement>) {
         e.preventDefault();
         const action = getRemapAction(e.key);
         if (action) {
-          performRemapAction(action, textareaRef.current, setText);
+          performRemapAction(
+            action,
+            textareaRef.current,
+            setTextWithCursorPosition,
+            setText
+          );
           setLastAction(action);
         }
       }
     },
-    [capsLockPressed, textareaRef]
+    [capsLockPressed, textareaRef, setTextWithCursorPosition]
   );
 
   const handleKeyUp = useCallback((e: KeyboardEvent) => {
@@ -36,12 +50,23 @@ export function useRemap(textareaRef: React.RefObject<HTMLTextAreaElement>) {
     if (textarea) {
       textarea.addEventListener("keydown", handleKeyDown);
       textarea.addEventListener("keyup", handleKeyUp);
+
+      if (cursorPosition !== null) {
+        textarea.setSelectionRange(cursorPosition, cursorPosition);
+      }
+
       return () => {
         textarea.removeEventListener("keydown", handleKeyDown);
         textarea.removeEventListener("keyup", handleKeyUp);
       };
     }
-  }, [handleKeyDown, handleKeyUp, textareaRef]);
+  }, [handleKeyDown, handleKeyUp, textareaRef, cursorPosition]);
 
-  return { text, setText, capsLockPressed, lastAction };
+  return {
+    text,
+    setText,
+    setTextWithCursorPosition,
+    capsLockPressed,
+    lastAction,
+  };
 }
