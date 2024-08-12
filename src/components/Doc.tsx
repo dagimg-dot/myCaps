@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 function Heading1({ children }: { children: React.ReactNode }) {
   return <h1 className="text-2xl font-bold mb-5">{children}</h1>;
@@ -8,7 +8,13 @@ function Heading2({ children }: { children: React.ReactNode }) {
   return <h2 className="text-xl font-bold my-5">{children}</h2>;
 }
 
-function KeyGroup({ title, children }: { title: string; children: React.ReactNode }) {
+function KeyGroup({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) {
   return (
     <div className="mb-6">
       <h3 className="text-lg font-semibold mb-2 text-violet-400">{title}</h3>
@@ -17,10 +23,12 @@ function KeyGroup({ title, children }: { title: string; children: React.ReactNod
   );
 }
 
-function Key({ keyName, action }: { keyName: string; action: string }) {
+function Key({ keyName, action }: { keyName: string; action?: string }) {
   return (
     <div className="flex items-center space-x-2">
-      <span className="bg-slate-700 text-slate-200 px-2 py-1 rounded font-mono">{keyName}</span>
+      <span className="bg-slate-700 text-slate-200 px-2 py-1 rounded font-mono">
+        {keyName}
+      </span>
       <span className="text-slate-300">{action}</span>
     </div>
   );
@@ -32,8 +40,8 @@ function Doc() {
       <Heading1>MyCaps</Heading1>
       <p>
         <strong>MyCaps</strong> is a simple <strong>CapsLock Emulator</strong> I
-        built in couple of days just to give you the taste of how I use my keyboard.
-        Maybe you don't like it, but thanks for checking it out!
+        built in couple of days just to give you the taste of how I use my
+        keyboard. Maybe you don't like it, but thanks for checking it out!
       </p>
       <Heading2>Why ?</Heading2>
       <p>
@@ -67,11 +75,22 @@ function Doc() {
             keyd
           </a>
         </strong>
-        .
+        . And here I want to show you what I am capable of doing by remapping
+        CapsLock to work as modifier and use it for text editing and more.
       </p>
       <Heading2>Guide</Heading2>
-      <p>When you are in this webapp, CapsLock is like your magic wand. You can do a lot of things with it. Just hold CapsLock with your left hand pinky finger and see the magic happen:</p>
-      
+      <p>
+        When you are in this webapp,
+        <span className="bg-slate-700 text-slate-200 px-2 py-1 mx-1 rounded font-mono">
+          CapsLock
+        </span>
+        is like your magic wand. You can do a lot of things with it. Just hold{" "}
+        <span className="bg-slate-700 text-slate-200 px-2 py-1 mx-1 rounded font-mono">
+          CapsLock
+        </span>
+        with your left hand pinky finger and see the magic happen:
+      </p>
+
       <div className="mt-4 space-y-6">
         <KeyGroup title="Left Hand (Home Row)">
           <Key keyName="A" action="Select All" />
@@ -99,7 +118,10 @@ function Doc() {
       </div>
 
       <p className="mt-6">
-        This layout is designed for efficiency. The left hand controls common text operations, while the right hand manages cursor movement and text editing. It's all about keeping your hands on the home row and minimizing unnecessary movements.
+        This layout is designed for efficiency. The left hand controls common
+        text operations, while the right hand manages cursor movement and text
+        editing. It's all about keeping your hands on the home row and
+        minimizing unnecessary movements.
       </p>
     </div>
   );
