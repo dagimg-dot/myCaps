@@ -85,7 +85,6 @@ class TextEditor {
     const horizontalPosition = this.selectionStart - currentLineStart;
 
     const targetLineNumber = currentLineNumber + MoveDirection[direction];
-    console.log("target line number", targetLineNumber);
 
     if (targetLineNumber < 0 || targetLineNumber >= lines.length) {
       return;
@@ -106,6 +105,11 @@ class TextEditor {
   }
 
   deleteLetter(direction: DeleteDirectionType) {
+    if (window.getSelection()?.toString() === this.value) {
+      this.setTextWithCursorPosition("", this.selectionStart);
+      return;
+    }
+
     const { startOffset, endOffset } = DeleteDirection[direction];
     this.setTextWithCursorPosition(
       this.value.slice(0, this.selectionStart + startOffset) +

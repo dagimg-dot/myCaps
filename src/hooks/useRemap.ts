@@ -53,7 +53,6 @@ export function useRemap(textareaRef: React.RefObject<HTMLTextAreaElement>) {
       textarea.addEventListener("keyup", handleKeyUp);
 
       if (cursorPosition !== null && window.getSelection()?.toString() === "") {
-        console.log("setting cursor position");
         textarea.setSelectionRange(cursorPosition, cursorPosition);
       }
 
