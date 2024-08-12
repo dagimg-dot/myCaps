@@ -5,7 +5,6 @@ class VirtualClipboard {
     const selectedText = this.getSelectedText();
     if (selectedText && this.isSubstring(selectedText, originalText)) {
       this.copySelectedText(selectedText);
-      console.log("copied", selectedText);
     }
     this.periodicClear();
   }
