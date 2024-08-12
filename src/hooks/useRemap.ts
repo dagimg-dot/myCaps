@@ -31,6 +31,7 @@ export function useRemap(textareaRef: React.RefObject<HTMLTextAreaElement>) {
             action,
             textareaRef.current,
             setTextWithCursorPosition,
+            setCursorPosition,
             setText
           );
           updateLastAction(action);
@@ -52,21 +53,24 @@ export function useRemap(textareaRef: React.RefObject<HTMLTextAreaElement>) {
       textarea.addEventListener("keydown", handleKeyDown);
       textarea.addEventListener("keyup", handleKeyUp);
 
-      if (cursorPosition !== null) {
+      if (cursorPosition !== null && window.getSelection()?.toString() === "") {
+        console.log("setting cursor position");
         textarea.setSelectionRange(cursorPosition, cursorPosition);
       }
 
       return () => {
         textarea.removeEventListener("keydown", handleKeyDown);
         textarea.removeEventListener("keyup", handleKeyUp);
+        setCursorPosition(null);
       };
     }
-  }, [handleKeyDown, handleKeyUp, textareaRef, cursorPosition]);
+  }, [handleKeyDown, handleKeyUp, textareaRef, cursorPosition, setText]);
 
   return {
     text,
     setText,
     setTextWithCursorPosition,
+    setCursorPosition,
     capsLockPressed,
   };
 }
