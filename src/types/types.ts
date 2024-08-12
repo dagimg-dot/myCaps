@@ -17,3 +17,10 @@ export interface GlobalState {
   lastAction: string;
   updateLastAction: (action: RemapAction) => void;
 }
+
+export interface PerformRemapActionArgs {
+  action: RemapAction;
+  textareaRef: HTMLTextAreaElement;
+  setTextWithCursorPosition: (text: string, cursorPosition: number) => void;
+  setText: (text: string) => void;
+}

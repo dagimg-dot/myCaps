@@ -1,5 +1,5 @@
-import clipboard from "@/core/clipboard";
-import { RemapAction } from "@/types/types";
+import { PerformRemapActionArgs, RemapAction } from "@/types/types";
+import TextEditor from "@/core/editor";
 
 const remapActionMap: Record<string, RemapAction> = {
   a: RemapAction.SelectAll,
@@ -12,73 +12,34 @@ const remapActionMap: Record<string, RemapAction> = {
   i: RemapAction.MoveUp,
   n: RemapAction.Backspace,
   m: RemapAction.Delete,
-  ",": RemapAction.Undo,
-  ".": RemapAction.Redo,
 };
 
-export function performRemapAction(
-  action: RemapAction,
-  textareaElement: HTMLTextAreaElement,
-  setTextWithCursorPosition: (text: string, cursorPosition: number) => void,
-  setText: (text: string) => void
-): void {
-  const { selectionStart, selectionEnd, value } = textareaElement;
-
-  switch (action) {
+export function performRemapAction(args: PerformRemapActionArgs): void {
+  const textEditor = new TextEditor(args);
+  switch (args.action) {
     case RemapAction.SelectAll:
-      textareaElement.select();
+      textEditor.selectAll();
       break;
     case RemapAction.Cut:
-      clipboard.copy(value);
-      document.execCommand("cut");
+      textEditor.cut();
       break;
     case RemapAction.Copy:
-      clipboard.copy(value);
+      textEditor.copy();
       break;
-    case RemapAction.Paste: {
-      if (!clipboard.paste()) {
-        console.log("Nothing to paste");
-        return;
-      }
-      const newText =
-        value.slice(0, selectionStart) +
-        clipboard.paste() +
-        value.slice(selectionEnd);
-      setTextWithCursorPosition(
-        newText,
-        selectionStart + clipboard.paste()!.length
-      );
+    case RemapAction.Paste:
+      textEditor.paste();
       break;
-    }
     case RemapAction.MoveLeft:
-      textareaElement.setSelectionRange(selectionStart - 1, selectionStart - 1);
+      textEditor.moveHorizontal("left");
       break;
-    case RemapAction.MoveDown: {
-      const nextLineStart = value.indexOf("\n", selectionEnd) + 1;
-      textareaElement.setSelectionRange(nextLineStart, nextLineStart);
-      break;
-    }
     case RemapAction.MoveRight:
-      textareaElement.setSelectionRange(selectionEnd + 1, selectionEnd + 1);
+      textEditor.moveHorizontal("right");
       break;
-    case RemapAction.MoveUp: {
-      const prevLineEnd = value.lastIndexOf("\n", selectionStart - 1);
-      textareaElement.setSelectionRange(prevLineEnd + 1, prevLineEnd + 1);
-      break;
-    }
     case RemapAction.Backspace:
-      setText(value.slice(0, selectionStart - 1) + value.slice(selectionEnd));
-      textareaElement.setSelectionRange(selectionStart - 1, selectionStart - 1);
+      textEditor.deleteLetter("left");
       break;
     case RemapAction.Delete:
-      setText(value.slice(0, selectionStart) + value.slice(selectionEnd + 1));
-      textareaElement.setSelectionRange(selectionStart, selectionStart);
-      break;
-    case RemapAction.Undo:
-      document.execCommand("undo");
-      break;
-    case RemapAction.Redo:
-      document.execCommand("redo");
+      textEditor.deleteLetter("right");
       break;
   }
 }

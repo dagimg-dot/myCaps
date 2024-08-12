@@ -27,12 +27,12 @@ export function useRemap(textareaRef: React.RefObject<HTMLTextAreaElement>) {
         e.preventDefault();
         const action = getRemapAction(e.key);
         if (action) {
-          performRemapAction(
-            action,
-            textareaRef.current,
+          performRemapAction({
+            action: action,
+            textareaRef: textareaRef.current,
             setTextWithCursorPosition,
-            setText
-          );
+            setText,
+          });
           updateLastAction(action);
         }
       }
@@ -68,8 +68,5 @@ export function useRemap(textareaRef: React.RefObject<HTMLTextAreaElement>) {
   return {
     text,
     setText,
-    setTextWithCursorPosition,
-    setCursorPosition,
-    capsLockPressed,
   };
 }
