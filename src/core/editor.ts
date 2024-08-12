@@ -4,6 +4,8 @@ import { PerformRemapActionArgs } from "@/types/types";
 const MoveDirection = {
   left: -1,
   right: 1,
+  up: -1,
+  down: 1,
 } as const;
 
 const DeleteDirection = {
@@ -37,7 +39,7 @@ class TextEditor {
   }
 
   cut() {
-    clipboard.copy(this.value);
+    this.copy();
     document.execCommand("cut");
   }
 
@@ -64,6 +66,43 @@ class TextEditor {
       this.selectionStart + MoveDirection[direction],
       this.selectionStart + MoveDirection[direction]
     );
+  }
+
+  moveVertical(direction: MoveDirectionType) {
+    const lines = this.value.split("\n");
+
+    let currentLineStart = 0;
+    let currentLineNumber = 0;
+    for (let i = 0; i < lines.length; i++) {
+      if (currentLineStart + lines[i].length >= this.selectionStart) {
+        currentLineNumber = i;
+        break;
+      }
+      currentLineStart += lines[i].length + 1;
+    }
+
+    const currentLine = lines[currentLineNumber];
+    const horizontalPosition = this.selectionStart - currentLineStart;
+
+    const targetLineNumber = currentLineNumber + MoveDirection[direction];
+    console.log("target line number", targetLineNumber);
+
+    if (targetLineNumber < 0 || targetLineNumber >= lines.length) {
+      return;
+    }
+
+    const targetLine = lines[targetLineNumber];
+    let targetLineStart = currentLineStart;
+
+    targetLineStart +=
+      MoveDirection[direction] *
+        (direction === "up" ? targetLine.length : currentLine.length) +
+      MoveDirection[direction];
+
+    const newPosition =
+      targetLineStart + Math.min(horizontalPosition, targetLine.length);
+
+    this.textArea.setSelectionRange(newPosition, newPosition);
   }
 
   deleteLetter(direction: DeleteDirectionType) {

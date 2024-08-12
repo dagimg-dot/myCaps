@@ -35,6 +35,12 @@ export function performRemapAction(args: PerformRemapActionArgs): void {
     case RemapAction.MoveRight:
       textEditor.moveHorizontal("right");
       break;
+    case RemapAction.MoveUp:
+      textEditor.moveVertical("up");
+      break;
+    case RemapAction.MoveDown:
+      textEditor.moveVertical("down");
+      break;
     case RemapAction.Backspace:
       textEditor.deleteLetter("left");
       break;
