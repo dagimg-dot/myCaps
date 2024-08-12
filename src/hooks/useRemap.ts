@@ -31,7 +31,6 @@ export function useRemap(textareaRef: React.RefObject<HTMLTextAreaElement>) {
             action,
             textareaRef.current,
             setTextWithCursorPosition,
-            setCursorPosition,
             setText
           );
           updateLastAction(action);
