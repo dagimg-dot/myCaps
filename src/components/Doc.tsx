@@ -75,7 +75,7 @@ function Doc() {
             keyd
           </a>
         </strong>
-        . And here I want to show you what I am capable of doing by remapping
+        . And here I want to show you what you can be capable of doing by remapping
         CapsLock to work as modifier and use it for text editing and more.
       </p>
       <Heading2>Guide</Heading2>
