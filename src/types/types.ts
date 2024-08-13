@@ -28,3 +28,5 @@ export interface PerformRemapActionArgs {
   setTextWithCursorPosition: (text: string, cursorPosition: number) => void;
   setText: (text: string) => void;
 }
+
+export const SUPPORTED_MODIFIERS = ["capslock", "e", "shift"];

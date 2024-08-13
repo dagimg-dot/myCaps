@@ -1,8 +1,8 @@
 import { useState, useCallback, useEffect } from "react";
-import { performRemapAction, getRemapAction } from "@/core/remap";
+import { performRemapAction, generateActionKey } from "@/core/remap";
 import useGlobalStore from "@/store";
+import { SUPPORTED_MODIFIERS } from "@/types/types";
 
-const SUPPORTED_MODIFIERS = ["capslock", "e", "shift"];
 
 export function useRemap(textareaRef: React.RefObject<HTMLTextAreaElement>) {
   const [keyState, setKeyState] = useState(new Map<string, boolean>());
@@ -28,12 +28,7 @@ export function useRemap(textareaRef: React.RefObject<HTMLTextAreaElement>) {
       if (keyState.get("capslock") && textareaRef.current) {
         e.preventDefault();
 
-        let action;
-        if (keyState.get("e")) {
-          action = getRemapAction(`e${e.key}`);
-        } else {
-          action = getRemapAction(e.key);
-        }
+        const action = generateActionKey(keyState, key);
         if (action) {
           performRemapAction({
             action: action,

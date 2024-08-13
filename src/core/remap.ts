@@ -1,4 +1,8 @@
-import { PerformRemapActionArgs, RemapAction } from "@/types/types";
+import {
+  PerformRemapActionArgs,
+  RemapAction,
+  SUPPORTED_MODIFIERS,
+} from "@/types/types";
 import TextEditor from "@/core/editor";
 
 const remapActionMap: Record<string, RemapAction> = {
@@ -66,6 +70,13 @@ export function performRemapAction(args: PerformRemapActionArgs): void {
   }
 }
 
-export function getRemapAction(key: string): RemapAction | null {
-  return remapActionMap[key.toLowerCase()] || null;
+export function generateActionKey(
+  keyState: Map<string, boolean>,
+  key: string
+): RemapAction | null {
+  const modifiers = SUPPORTED_MODIFIERS.slice(1); // Remove capslock since it is the base modifier
+  const activeModifier = modifiers.find((mod) => keyState.get(mod));
+  const actionKey = activeModifier ? `${activeModifier}${key}` : key;
+
+  return remapActionMap[actionKey] || null;
 }
