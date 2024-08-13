@@ -14,6 +14,8 @@ const remapActionMap: Record<string, RemapAction> = {
   i: RemapAction.MoveUp,
   n: RemapAction.Backspace,
   m: RemapAction.Delete,
+  el: RemapAction.MoveRightWord,
+  ej: RemapAction.MoveLeftWord,
 };
 
 export function performRemapAction(args: PerformRemapActionArgs): void {
@@ -54,6 +56,12 @@ export function performRemapAction(args: PerformRemapActionArgs): void {
       break;
     case RemapAction.Delete:
       textEditor.deleteLetter("right");
+      break;
+    case RemapAction.MoveRightWord:
+      textEditor.moveRightWord();
+      break;
+    case RemapAction.MoveLeftWord:
+      textEditor.moveLeftWord();
       break;
   }
 }

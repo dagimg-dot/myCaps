@@ -11,6 +11,8 @@ export enum RemapAction {
   MoveEndLine = "Move End Line",
   Backspace = "Backspace",
   Delete = "Delete",
+  MoveRightWord = "Move Right Word",
+  MoveLeftWord = "Move Left Word",
   Undo = "Undo",
   Redo = "Redo",
 }

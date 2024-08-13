@@ -130,6 +130,44 @@ class TextEditor {
     this.textArea.setSelectionRange(newPosition, newPosition);
   }
 
+  moveRightWord() {
+    const lines = this.#getLines();
+    const { lineNumber: currentLineNumber, lineStart: currentLineStart } =
+      this.#getCurrentLine(lines);
+    const nextWordStart = this.value.indexOf(" ", this.selectionStart) + 1;
+    const currentLineEnd = currentLineStart + lines[currentLineNumber].length;
+
+    if (nextWordStart === 0 || nextWordStart > currentLineEnd) {
+      const newSelectionStart =
+        this.selectionStart === currentLineEnd
+          ? currentLineEnd + 1
+          : currentLineEnd;
+      this.textArea.setSelectionRange(newSelectionStart, newSelectionStart);
+    } else {
+      this.textArea.setSelectionRange(nextWordStart, nextWordStart);
+    }
+  }
+
+  moveLeftWord() {
+    const lines = this.#getLines();
+    const { lineNumber: currentLineNumber, lineStart: currentLineStart } =
+      this.#getCurrentLine(lines);
+    const prevWordStart = this.value
+      .slice(0, this.selectionEnd)
+      .lastIndexOf(" ");
+    const prevLineEnd = lines[currentLineNumber - 1]?.length || 0;
+
+    if (prevWordStart >= currentLineStart) {
+      this.textArea.setSelectionRange(prevWordStart, prevWordStart);
+    } else {
+      const newSelectionStart =
+        this.selectionStart === currentLineStart
+          ? prevLineEnd
+          : currentLineStart;
+      this.textArea.setSelectionRange(newSelectionStart, newSelectionStart);
+    }
+  }
+
   deleteLetter(direction: DeleteDirectionType) {
     if (window.getSelection()?.toString() === this.value) {
       this.setTextWithCursorPosition("", this.selectionStart);
