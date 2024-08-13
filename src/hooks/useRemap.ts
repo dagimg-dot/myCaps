@@ -3,7 +3,7 @@ import { performRemapAction, getRemapAction } from "@/core/remap";
 import useGlobalStore from "@/store";
 
 export function useRemap(textareaRef: React.RefObject<HTMLTextAreaElement>) {
-  const [capsLockPressed, setCapsLockPressed] = useState(false);
+  const [keyState, setKeyState] = useState(new Map<string, boolean>());
   const { updateLastAction } = useGlobalStore();
   const [text, setText] = useState("");
   const [cursorPosition, setCursorPosition] = useState<number | null>(null);
@@ -18,12 +18,10 @@ export function useRemap(textareaRef: React.RefObject<HTMLTextAreaElement>) {
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
-      if (e.key === "CapsLock") {
-        e.preventDefault();
-        setCapsLockPressed(true);
-      }
+      const key = e.key.toLowerCase();
+      setKeyState((prev) => new Map(prev).set(key, true));
 
-      if (capsLockPressed && textareaRef.current) {
+      if (keyState.get("capslock") && textareaRef.current) {
         e.preventDefault();
         const action = getRemapAction(e.key);
         if (action) {
@@ -37,13 +35,12 @@ export function useRemap(textareaRef: React.RefObject<HTMLTextAreaElement>) {
         }
       }
     },
-    [capsLockPressed, textareaRef, setTextWithCursorPosition, updateLastAction]
+    [keyState, textareaRef, setTextWithCursorPosition, updateLastAction]
   );
 
   const handleKeyUp = useCallback((e: KeyboardEvent) => {
-    if (e.key === "CapsLock") {
-      setCapsLockPressed(false);
-    }
+    const key = e.key.toLowerCase();
+    setKeyState((prev) => new Map(prev).set(key, false));
   }, []);
 
   useEffect(() => {
