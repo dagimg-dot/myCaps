@@ -103,17 +103,9 @@ class TextEditor {
   }
 
   moveVertical(direction: MoveDirectionType) {
-    const lines = this.value.split("\n");
-
-    let currentLineStart = 0;
-    let currentLineNumber = 0;
-    for (let i = 0; i < lines.length; i++) {
-      if (currentLineStart + lines[i].length >= this.selectionStart) {
-        currentLineNumber = i;
-        break;
-      }
-      currentLineStart += lines[i].length + 1;
-    }
+    const lines = this.#getLines();
+    const { lineStart: currentLineStart, lineNumber: currentLineNumber } =
+      this.#getCurrentLine(lines);
 
     const currentLine = lines[currentLineNumber];
     const horizontalPosition = this.selectionStart - currentLineStart;
