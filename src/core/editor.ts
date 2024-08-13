@@ -61,11 +61,45 @@ class TextEditor {
     );
   }
 
-  moveHorizontal(direction: MoveDirectionType) {
-    this.textArea.setSelectionRange(
-      this.selectionStart + MoveDirection[direction],
-      this.selectionStart + MoveDirection[direction]
-    );
+  #getCurrentLine(lines: string[]) {
+    let lineStart = 0;
+    let lineNumber = 0;
+    for (let i = 0; i < lines.length; i++) {
+      if (lineStart + lines[i].length >= this.selectionStart) {
+        lineNumber = i;
+        break;
+      }
+      lineStart += lines[i].length + 1;
+    }
+
+    return { lineStart, lineNumber };
+  }
+
+  #getLines() {
+    // Todo: make line generating function more robust to handle
+    // non-newline texts (continuous texts)
+    return this.value.split("\n");
+  }
+
+  moveHorizontal(direction: MoveDirectionType, start = false) {
+    if (!start) {
+      this.textArea.setSelectionRange(
+        this.selectionStart + MoveDirection[direction],
+        this.selectionStart + MoveDirection[direction]
+      );
+      return;
+    }
+
+    const lines = this.#getLines();
+    const { lineStart: currentLineStart, lineNumber: currentLineNumber } =
+      this.#getCurrentLine(lines);
+    if (direction == "left") {
+      this.textArea.setSelectionRange(currentLineStart, currentLineStart);
+    } else {
+      const currentLineEnd = currentLineStart + lines[currentLineNumber].length;
+      this.textArea.setSelectionRange(currentLineEnd, currentLineEnd);
+    }
+    3;
   }
 
   moveVertical(direction: MoveDirectionType) {

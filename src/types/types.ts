@@ -7,6 +7,8 @@ export enum RemapAction {
   MoveDown = "Move Down",
   MoveRight = "Move Right",
   MoveUp = "Move Up",
+  MoveStartLine = "Move Start Line",
+  MoveEndLine = "Move End Line",
   Backspace = "Backspace",
   Delete = "Delete",
   Undo = "Undo",

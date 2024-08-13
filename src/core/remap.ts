@@ -8,6 +8,8 @@ const remapActionMap: Record<string, RemapAction> = {
   f: RemapAction.Paste,
   j: RemapAction.MoveLeft,
   k: RemapAction.MoveDown,
+  u: RemapAction.MoveStartLine,
+  o: RemapAction.MoveEndLine,
   l: RemapAction.MoveRight,
   i: RemapAction.MoveUp,
   n: RemapAction.Backspace,
@@ -40,6 +42,12 @@ export function performRemapAction(args: PerformRemapActionArgs): void {
       break;
     case RemapAction.MoveDown:
       textEditor.moveVertical("down");
+      break;
+    case RemapAction.MoveStartLine:
+      textEditor.moveHorizontal("left", true);
+      break;
+    case RemapAction.MoveEndLine:
+      textEditor.moveHorizontal("right", true);
       break;
     case RemapAction.Backspace:
       textEditor.deleteLetter("left");
