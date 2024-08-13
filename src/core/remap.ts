@@ -24,49 +24,31 @@ const remapActionMap: Record<string, RemapAction> = {
 
 export function performRemapAction(args: PerformRemapActionArgs): void {
   const textEditor = new TextEditor(args);
-  switch (args.action) {
-    case RemapAction.SelectAll:
-      textEditor.selectAll();
-      break;
-    case RemapAction.Cut:
-      textEditor.cut();
-      break;
-    case RemapAction.Copy:
-      textEditor.copy();
-      break;
-    case RemapAction.Paste:
-      textEditor.paste();
-      break;
-    case RemapAction.MoveLeft:
-      textEditor.moveHorizontal("left");
-      break;
-    case RemapAction.MoveRight:
-      textEditor.moveHorizontal("right");
-      break;
-    case RemapAction.MoveUp:
-      textEditor.moveVertical("up");
-      break;
-    case RemapAction.MoveDown:
-      textEditor.moveVertical("down");
-      break;
-    case RemapAction.MoveStartLine:
-      textEditor.moveHorizontal("left", true);
-      break;
-    case RemapAction.MoveEndLine:
-      textEditor.moveHorizontal("right", true);
-      break;
-    case RemapAction.Backspace:
-      textEditor.deleteLetter("left");
-      break;
-    case RemapAction.Delete:
-      textEditor.deleteLetter("right");
-      break;
-    case RemapAction.MoveRightWord:
-      textEditor.moveRightWord();
-      break;
-    case RemapAction.MoveLeftWord:
-      textEditor.moveLeftWord();
-      break;
+
+  const actionMap: { [key in RemapAction]: () => void } = {
+    [RemapAction.SelectAll]: () => textEditor.selectAll(),
+    [RemapAction.Cut]: () => textEditor.cut(),
+    [RemapAction.Copy]: () => textEditor.copy(),
+    [RemapAction.Paste]: () => textEditor.paste(),
+    [RemapAction.MoveLeft]: () => textEditor.moveHorizontal("left"),
+    [RemapAction.MoveRight]: () => textEditor.moveHorizontal("right"),
+    [RemapAction.MoveUp]: () => textEditor.moveVertical("up"),
+    [RemapAction.MoveDown]: () => textEditor.moveVertical("down"),
+    [RemapAction.MoveStartLine]: () => textEditor.moveHorizontal("left", true),
+    [RemapAction.MoveEndLine]: () => textEditor.moveHorizontal("right", true),
+    [RemapAction.Backspace]: () => textEditor.deleteLetter("left"),
+    [RemapAction.Delete]: () => textEditor.deleteLetter("right"),
+    [RemapAction.MoveRightWord]: () => textEditor.moveRightWord(),
+    [RemapAction.MoveLeftWord]: () => textEditor.moveLeftWord(),
+    [RemapAction.SelectLetterLeft]: () => textEditor.selectLetterLeft(),
+    [RemapAction.SelectLetterRight]: () => textEditor.selectLetterRight(),
+    [RemapAction.SelectWordRight]: () => textEditor.selectWordRight(),
+  };
+
+  // Execute the action if it exists in the map
+  const action = actionMap[args.action];
+  if (action) {
+    action();
   }
 }
 
