@@ -13,8 +13,8 @@ export enum RemapAction {
   Delete = "Delete",
   MoveRightWord = "Move Right Word",
   MoveLeftWord = "Move Left Word",
-  Undo = "Undo",
-  Redo = "Redo",
+  SelectLetterRight = "Select Letter Right",
+  SelectLetterLeft = "Select Letter Left",
 }
 
 export interface GlobalState {

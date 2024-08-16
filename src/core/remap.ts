@@ -20,6 +20,8 @@ const remapActionMap: Record<string, RemapAction> = {
   m: RemapAction.Delete,
   el: RemapAction.MoveRightWord,
   ej: RemapAction.MoveLeftWord,
+  shiftl: RemapAction.SelectLetterRight,
+  shiftj: RemapAction.SelectLetterLeft,
 };
 
 export function performRemapAction(args: PerformRemapActionArgs): void {
@@ -42,7 +44,6 @@ export function performRemapAction(args: PerformRemapActionArgs): void {
     [RemapAction.MoveLeftWord]: () => textEditor.moveLeftWord(),
     [RemapAction.SelectLetterLeft]: () => textEditor.selectLetterLeft(),
     [RemapAction.SelectLetterRight]: () => textEditor.selectLetterRight(),
-    [RemapAction.SelectWordRight]: () => textEditor.selectWordRight(),
   };
 
   // Execute the action if it exists in the map
@@ -57,8 +58,26 @@ export function generateActionKey(
   key: string
 ): RemapAction | null {
   const modifiers = SUPPORTED_MODIFIERS.slice(1); // Remove capslock since it is the base modifier
-  const activeModifier = modifiers.find((mod) => keyState.get(mod));
-  const actionKey = activeModifier ? `${activeModifier}${key}` : key;
+  const activeModifiers = modifiers.filter((mod) => keyState.get(mod));
 
-  return remapActionMap[actionKey] || null;
+  const allCombinations = getCombinations(activeModifiers);
+
+  allCombinations.sort((a, b) => b.length - a.length);
+
+  for (const combination of allCombinations) {
+    const actionKey = [...combination, key].join("");
+    const action = remapActionMap[actionKey];
+    if (action) return action;
+  }
+
+  return remapActionMap[key] || null;
+}
+
+function getCombinations<T>(arr: T[]): T[][] {
+  const result: T[][] = [[]];
+  for (const item of arr) {
+    const newCombinations = result.map((comb) => [...comb, item]);
+    result.push(...newCombinations);
+  }
+  return result.slice(1);
 }

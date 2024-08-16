@@ -168,6 +168,22 @@ class TextEditor {
     }
   }
 
+  selectLetterLeft() {
+    const start = Math.max(0, this.selectionStart - 1);
+    const end = this.selectionEnd;
+
+    this.textArea.setSelectionRange(start, end);
+  }
+
+  selectLetterRight() {
+    const start = this.selectionStart;
+    const end = this.selectionEnd;
+
+    const newStart = start;
+    const newEnd = Math.min(end + 1, this.textArea.value.length);
+    this.textArea.setSelectionRange(newStart, newEnd);
+  }
+
   deleteLetter(direction: DeleteDirectionType) {
     if (window.getSelection()?.toString() === this.value) {
       this.setTextWithCursorPosition("", this.selectionStart);
