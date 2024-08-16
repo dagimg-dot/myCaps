@@ -19,7 +19,9 @@ export enum RemapAction {
 
 export interface GlobalState {
   lastAction: string;
+  direction: MovingDirection;
   updateLastAction: (action: RemapAction) => void;
+  updateDirection: (direction: MovingDirection) => void;
 }
 
 export interface PerformRemapActionArgs {
@@ -27,6 +29,10 @@ export interface PerformRemapActionArgs {
   textareaRef: HTMLTextAreaElement;
   setTextWithCursorPosition: (text: string, cursorPosition: number) => void;
   setText: (text: string) => void;
+  updateDirection: (direction: MovingDirection) => void;
+  direction: MovingDirection;
 }
 
 export const SUPPORTED_MODIFIERS = ["capslock", "e", "shift"];
+
+export type MovingDirection = "left" | "right" | null;

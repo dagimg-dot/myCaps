@@ -1,5 +1,5 @@
 import clipboard from "@/core/clipboard";
-import { PerformRemapActionArgs } from "@/types/types";
+import { MovingDirection, PerformRemapActionArgs } from "@/types/types";
 
 const MoveDirection = {
   left: -1,
@@ -20,6 +20,8 @@ class TextEditor {
   private value: string;
   private selectionStart: number;
   private selectionEnd: number;
+  private direction: MovingDirection;
+  private updateDirection: (direction: MovingDirection) => void;
   private textArea: HTMLTextAreaElement;
   private setTextWithCursorPosition: (
     text: string,
@@ -31,6 +33,8 @@ class TextEditor {
     this.value = args.textareaRef.value;
     this.selectionStart = args.textareaRef.selectionStart;
     this.selectionEnd = args.textareaRef.selectionEnd;
+    this.direction = args.direction;
+    this.updateDirection = args.updateDirection;
     this.setTextWithCursorPosition = args.setTextWithCursorPosition;
   }
 
@@ -168,7 +172,25 @@ class TextEditor {
     }
   }
 
+  #getSelectedText() {
+    return window.getSelection()?.toString();
+  }
+
+  #deselectLetter(direction: MovingDirection) {
+    const start = this.selectionStart + DeleteDirection[direction!].endOffset;
+    const end = this.selectionEnd + DeleteDirection[direction!].startOffset;
+
+    this.textArea.setSelectionRange(start, end);
+  }
+
   selectLetterLeft() {
+    if (this.#getSelectedText() !== "" && this.direction == "right") {
+      this.#deselectLetter("left");
+      return;
+    }
+
+    this.updateDirection("left");
+
     const start = Math.max(0, this.selectionStart - 1);
     const end = this.selectionEnd;
 
@@ -176,6 +198,13 @@ class TextEditor {
   }
 
   selectLetterRight() {
+    if (this.#getSelectedText() !== "" && this.direction == "left") {
+      this.#deselectLetter("right");
+      return;
+    }
+
+    this.updateDirection("right");
+
     const start = this.selectionStart;
     const end = this.selectionEnd;
 
@@ -185,7 +214,7 @@ class TextEditor {
   }
 
   deleteLetter(direction: DeleteDirectionType) {
-    if (window.getSelection()?.toString() === this.value) {
+    if (this.#getSelectedText() === this.value) {
       this.setTextWithCursorPosition("", this.selectionStart);
       return;
     }

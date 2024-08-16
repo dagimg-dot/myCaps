@@ -3,10 +3,9 @@ import { performRemapAction, generateActionKey } from "@/core/remap";
 import useGlobalStore from "@/store";
 import { SUPPORTED_MODIFIERS } from "@/types/types";
 
-
 export function useRemap(textareaRef: React.RefObject<HTMLTextAreaElement>) {
   const [keyState, setKeyState] = useState(new Map<string, boolean>());
-  const { updateLastAction } = useGlobalStore();
+  const { updateLastAction, updateDirection, direction } = useGlobalStore();
   const [text, setText] = useState("");
   const [cursorPosition, setCursorPosition] = useState<number | null>(null);
 
@@ -35,12 +34,21 @@ export function useRemap(textareaRef: React.RefObject<HTMLTextAreaElement>) {
             textareaRef: textareaRef.current,
             setTextWithCursorPosition,
             setText,
+            updateDirection,
+            direction,
           });
           updateLastAction(action);
         }
       }
     },
-    [keyState, textareaRef, setTextWithCursorPosition, updateLastAction]
+    [
+      keyState,
+      textareaRef,
+      setTextWithCursorPosition,
+      updateLastAction,
+      updateDirection,
+      direction,
+    ]
   );
 
   const handleKeyUp = useCallback((e: KeyboardEvent) => {
