@@ -192,7 +192,7 @@ class TextEditor {
       return;
     }
 
-    this.updateDirection("left");
+    this.#updateDirection("left");
 
     const start = Math.max(0, this.selectionStart - 1);
     const end = this.selectionEnd;
@@ -206,7 +206,7 @@ class TextEditor {
       return;
     }
 
-    this.updateDirection("right");
+    this.#updateDirection("right");
 
     const start = this.selectionStart;
     const end = this.selectionEnd;
