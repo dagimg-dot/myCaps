@@ -5,7 +5,7 @@ import { SUPPORTED_MODIFIERS } from "@/types/types";
 
 export function useRemap(textareaRef: React.RefObject<HTMLTextAreaElement>) {
   const [keyState, setKeyState] = useState(new Map<string, boolean>());
-  const { updateLastAction, updateDirection, direction } = useGlobalStore();
+  const { updateLastAction } = useGlobalStore();
   const [text, setText] = useState("");
   const [cursorPosition, setCursorPosition] = useState<number | null>(null);
 
@@ -33,22 +33,12 @@ export function useRemap(textareaRef: React.RefObject<HTMLTextAreaElement>) {
             action: action,
             textareaRef: textareaRef.current,
             setTextWithCursorPosition,
-            setText,
-            updateDirection,
-            direction,
           });
           updateLastAction(action);
         }
       }
     },
-    [
-      keyState,
-      textareaRef,
-      setTextWithCursorPosition,
-      updateLastAction,
-      updateDirection,
-      direction,
-    ]
+    [keyState, textareaRef, setTextWithCursorPosition, updateLastAction]
   );
 
   const handleKeyUp = useCallback((e: KeyboardEvent) => {

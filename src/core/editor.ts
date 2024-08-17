@@ -1,4 +1,5 @@
 import clipboard from "@/core/clipboard";
+import useGlobalStore from "@/store";
 import { MovingDirection, PerformRemapActionArgs } from "@/types/types";
 
 const MoveDirection = {
@@ -21,7 +22,6 @@ class TextEditor {
   private selectionStart: number;
   private selectionEnd: number;
   private direction: MovingDirection;
-  private updateDirection: (direction: MovingDirection) => void;
   private textArea: HTMLTextAreaElement;
   private setTextWithCursorPosition: (
     text: string,
@@ -33,9 +33,12 @@ class TextEditor {
     this.value = args.textareaRef.value;
     this.selectionStart = args.textareaRef.selectionStart;
     this.selectionEnd = args.textareaRef.selectionEnd;
-    this.direction = args.direction;
-    this.updateDirection = args.updateDirection;
+    this.direction = useGlobalStore.getState().direction;
     this.setTextWithCursorPosition = args.setTextWithCursorPosition;
+  }
+
+  #updateDirection(newdirection: MovingDirection) {
+    useGlobalStore.setState({ direction: newdirection });
   }
 
   selectAll() {
