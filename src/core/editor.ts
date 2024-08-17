@@ -222,6 +222,10 @@ class TextEditor {
       return;
     }
 
+    if (this.selectionStart == 0 && direction == "left") {
+      return;
+    }
+
     const { startOffset, endOffset } = DeleteDirection[direction];
     this.setTextWithCursorPosition(
       this.value.slice(0, this.selectionStart + startOffset) +
