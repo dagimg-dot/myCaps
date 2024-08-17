@@ -90,10 +90,11 @@ class TextEditor {
 
   moveHorizontal(direction: MoveDirectionType, start = false) {
     if (!start) {
-      this.textArea.setSelectionRange(
+      const selectionStart = Math.max(
         this.selectionStart + MoveDirection[direction],
-        this.selectionStart + MoveDirection[direction]
+        0
       );
+      this.textArea.setSelectionRange(selectionStart, selectionStart);
       return;
     }
 
@@ -106,7 +107,6 @@ class TextEditor {
       const currentLineEnd = currentLineStart + lines[currentLineNumber].length;
       this.textArea.setSelectionRange(currentLineEnd, currentLineEnd);
     }
-    3;
   }
 
   moveVertical(direction: MoveDirectionType) {
