@@ -45,6 +45,10 @@ class TextEditor {
     useGlobalStore.setState({ direction: newdirection });
   }
 
+  #setCursorPosition(position: number) {
+    this.textArea.setSelectionRange(position, position);
+  }
+
   selectAll() {
     this.textArea.select();
   }
@@ -64,6 +68,7 @@ class TextEditor {
   }
 
   paste() {
+    this.#setCursorPosition(this.selectionEnd);
     if (!clipboard.paste()) {
       return;
     }
@@ -103,7 +108,7 @@ class TextEditor {
         this.selectionStart + MoveDirection[direction],
         0
       );
-      this.textArea.setSelectionRange(selectionStart, selectionStart);
+      this.#setCursorPosition(selectionStart);
       return;
     }
 
@@ -111,10 +116,10 @@ class TextEditor {
     const { lineStart: currentLineStart, lineNumber: currentLineNumber } =
       this.#getCurrentLine(lines);
     if (direction == "left") {
-      this.textArea.setSelectionRange(currentLineStart, currentLineStart);
+      this.#setCursorPosition(currentLineStart);
     } else {
       const currentLineEnd = currentLineStart + lines[currentLineNumber].length;
-      this.textArea.setSelectionRange(currentLineEnd, currentLineEnd);
+      this.#setCursorPosition(currentLineEnd);
     }
   }
 
@@ -143,45 +148,91 @@ class TextEditor {
     const newPosition =
       targetLineStart + Math.min(horizontalPosition, targetLine.length);
 
-    this.textArea.setSelectionRange(newPosition, newPosition);
+    this.#setCursorPosition(newPosition);
+  }
+
+  private findNextWordPosition(direction: MoveDirectionType): number {
+    const isForward = direction === "right";
+
+    const lines = this.#getLines();
+    const { lineNumber, lineStart } = this.#getCurrentLine(lines);
+    const currentLine = lines[lineNumber];
+    const length = currentLine.length;
+    const currentPosition = this.selectionStart - lineStart;
+
+    // Handle edge cases
+    if (length === 0) return 0;
+    if (currentPosition < 0) return 0;
+    if (currentPosition > length) return length;
+
+    const isWordChar = (char: string) => /\w/.test(char);
+
+    let pos = currentPosition;
+
+    // Adjust starting position if we're at or beyond the end of the text
+    if (pos >= length) {
+      pos = length - 1;
+    }
+
+    if (!isForward) {
+      // Moving backward
+      // First, skip any spaces immediately to the left
+      while (pos > 0 && !isWordChar(currentLine[pos - 1])) {
+        pos--;
+      }
+      // Now move to the start of this word
+      while (pos > 0 && isWordChar(currentLine[pos - 1])) {
+        pos--;
+      }
+      // If we've landed on a space, skip any more spaces
+      while (pos > 0 && !isWordChar(currentLine[pos - 1])) {
+        pos--;
+      }
+
+      pos = pos + lineStart;
+
+      if (pos == lineStart && this.selectionStart !== lineStart) {
+        // Move to the start of the current line if the prev word is the first word in the line
+        pos = lineStart;
+      } else if (pos < lineStart || pos == lineStart) {
+        // Move to the end of the previous line if we're at the start of the current line
+        pos = lineStart - 1;
+      }
+    } else {
+      // Moving forward
+      // Skip the current word if we're in the middle of one
+      while (pos < length && isWordChar(currentLine[pos])) {
+        pos++;
+      }
+      // Skip any spaces
+      while (pos < length && !isWordChar(currentLine[pos])) {
+        pos++;
+      }
+
+      if (pos == length && this.selectionStart != length) {
+        // Move to the end of the current line if the word is the last word in the line
+        pos = lineStart + length;
+      } else if (pos > lineStart + length || pos == length) {
+        // Move to the start of the next line if we're at the end of the current line
+        pos = lineStart + length + 1;
+      }
+
+      pos = pos + lineStart;
+    }
+
+    return pos;
   }
 
   moveRightWord() {
-    const lines = this.#getLines();
-    const { lineNumber: currentLineNumber, lineStart: currentLineStart } =
-      this.#getCurrentLine(lines);
-    const nextWordStart = this.value.indexOf(" ", this.selectionStart) + 1;
-    const currentLineEnd = currentLineStart + lines[currentLineNumber].length;
+    const nextWordStart = this.findNextWordPosition("right");
 
-    if (nextWordStart === 0 || nextWordStart > currentLineEnd) {
-      const newSelectionStart =
-        this.selectionStart === currentLineEnd
-          ? currentLineEnd + 1
-          : currentLineEnd;
-      this.textArea.setSelectionRange(newSelectionStart, newSelectionStart);
-    } else {
-      this.textArea.setSelectionRange(nextWordStart, nextWordStart);
-    }
+    this.#setCursorPosition(nextWordStart);
   }
 
   moveLeftWord() {
-    const lines = this.#getLines();
-    const { lineNumber: currentLineNumber, lineStart: currentLineStart } =
-      this.#getCurrentLine(lines);
-    const prevWordStart = this.value
-      .slice(0, this.selectionEnd)
-      .lastIndexOf(" ");
-    const prevLineEnd = lines[currentLineNumber - 1]?.length || 0;
+    const prevWordStart = this.findNextWordPosition("left");
 
-    if (prevWordStart >= currentLineStart) {
-      this.textArea.setSelectionRange(prevWordStart, prevWordStart);
-    } else {
-      const newSelectionStart =
-        this.selectionStart === currentLineStart
-          ? prevLineEnd
-          : currentLineStart;
-      this.textArea.setSelectionRange(newSelectionStart, newSelectionStart);
-    }
+    this.#setCursorPosition(prevWordStart);
   }
 
   #getSelectedText() {

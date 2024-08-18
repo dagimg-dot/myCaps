@@ -128,6 +128,78 @@ third line`;
     expect(textArea.selectionEnd).toBe(endofSecondLinePos);
   });
 
+  it("should move to the start of the next word (capslock + e + l)", () => {
+    const word = "second";
+    const curPos = textArea.value.indexOf(word);
+    const nextWordStart = textArea.value.indexOf(word) + word.length + 1;
+    setCursorPosition(curPos);
+
+    editor.moveRightWord();
+
+    expect(textArea.selectionStart).toBe(nextWordStart);
+    expect(textArea.selectionEnd).toBe(nextWordStart);
+  });
+
+  it("should move to the end of the line if the word is the last word in the line", () => {
+    const word = "line";
+    const curPos = textArea.value.indexOf(word);
+    const nextWordStart = textArea.value.indexOf(word) + word.length;
+    setCursorPosition(curPos);
+
+    editor.moveRightWord();
+
+    expect(textArea.selectionStart).toBe(nextWordStart);
+    expect(textArea.selectionEnd).toBe(nextWordStart);
+  });
+
+  it("should move to the start of the next line if the cursor is at the end of the current line", () => {
+    const word = "line";
+    const curPos = textArea.value.indexOf(word) + word.length;
+    const nextLineStart = textArea.value.indexOf(word) + word.length + 1;
+    setCursorPosition(curPos);
+
+    editor.moveRightWord();
+
+    expect(textArea.selectionStart).toBe(nextLineStart);
+    expect(textArea.selectionEnd).toBe(nextLineStart);
+  });
+
+  it("should move to the end of the previous word (capslock + e + j)", () => {
+    const word = "line";
+    const curPos = textArea.value.indexOf(word) + 2;
+    const prevWordStart = textArea.value.indexOf(word) - 1;
+    setCursorPosition(curPos);
+
+    editor.moveLeftWord();
+
+    expect(textArea.selectionStart).toBe(prevWordStart);
+    expect(textArea.selectionEnd).toBe(prevWordStart);
+  });
+
+  it("should move to the start of the line if the prev word is the first word in the line", () => {
+    const word = "second";
+    const curPos = textArea.value.indexOf(word) + 3;
+    const prevWordStart = textArea.value.indexOf(word);
+    setCursorPosition(curPos);
+
+    editor.moveLeftWord();
+
+    expect(textArea.selectionStart).toBe(prevWordStart);
+    expect(textArea.selectionEnd).toBe(prevWordStart);
+  });
+
+  it("should move to the end of the previous line if the cursor is at the start of the current line", () => {
+    const word = "second";
+    const curPos = textArea.value.indexOf(word);
+    const prevLineStart = textArea.value.indexOf(word) - 1;
+    setCursorPosition(curPos);
+
+    editor.moveLeftWord();
+
+    expect(textArea.selectionStart).toBe(prevLineStart);
+    expect(textArea.selectionEnd).toBe(prevLineStart);
+  });
+
   afterEach(() => {
     clipboard.clear();
     document.body.removeChild(textArea);
