@@ -74,8 +74,6 @@ multi line text`;
     setMockSelection(6, 11);
     clipboard.copy(textarea.value);
 
-    console.log(clipboard.getHistory());
-
     expect(clipboard.getHistory()).toContain(mockSelectedText);
   });
 
