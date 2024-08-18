@@ -45,9 +45,14 @@ class TextEditor {
     this.textArea.select();
   }
 
+  // Cut is implemeneted here and not in the clipboard.ts file because
+  // it manipulates the textarea value and the cursor position directly
   cut() {
     this.copy();
-    document.execCommand("cut");
+    this.setTextWithCursorPosition(
+      this.value.replace(this.#getSelectedText()!, ""),
+      this.selectionStart
+    );
   }
 
   copy() {
