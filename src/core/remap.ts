@@ -11,17 +11,17 @@ const remapActionMap: Record<string, RemapAction> = {
   d: RemapAction.Copy,
   f: RemapAction.Paste,
   j: RemapAction.MoveLeft,
-  k: RemapAction.MoveDown,
+  k: RemapAction.MoveDown, // Not tested
   u: RemapAction.MoveStartLine,
   o: RemapAction.MoveEndLine,
   l: RemapAction.MoveRight,
-  i: RemapAction.MoveUp,
-  n: RemapAction.Backspace,
-  m: RemapAction.Delete,
+  i: RemapAction.MoveUp, // Not tested
+  n: RemapAction.Backspace, // Not tested
+  m: RemapAction.Delete, // Not tested
   el: RemapAction.MoveRightWord,
   ej: RemapAction.MoveLeftWord,
-  shiftl: RemapAction.SelectLetterRight,
-  shiftj: RemapAction.SelectLetterLeft,
+  shiftl: RemapAction.SelectLetterRight, // Not tested
+  shiftj: RemapAction.SelectLetterLeft, // Not tested
 };
 
 export function performRemapAction(args: PerformRemapActionArgs): void {
@@ -40,8 +40,8 @@ export function performRemapAction(args: PerformRemapActionArgs): void {
     [RemapAction.MoveEndLine]: () => textEditor.moveHorizontal("right", true),
     [RemapAction.Backspace]: () => textEditor.deleteLetter("left"),
     [RemapAction.Delete]: () => textEditor.deleteLetter("right"),
-    [RemapAction.MoveRightWord]: () => textEditor.moveRightWord(),
-    [RemapAction.MoveLeftWord]: () => textEditor.moveLeftWord(),
+    [RemapAction.MoveRightWord]: () => textEditor.moveByWord("right"),
+    [RemapAction.MoveLeftWord]: () => textEditor.moveByWord("left"),
     [RemapAction.SelectLetterLeft]: () => textEditor.selectLetterLeft(),
     [RemapAction.SelectLetterRight]: () => textEditor.selectLetterRight(),
   };

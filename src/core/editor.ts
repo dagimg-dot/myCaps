@@ -223,16 +223,10 @@ class TextEditor {
     return pos;
   }
 
-  moveRightWord() {
-    const nextWordStart = this.findNextWordPosition("right");
+  moveByWord(direction: MoveDirectionType) {
+    const wordStart = this.findNextWordPosition(direction);
 
-    this.#setCursorPosition(nextWordStart);
-  }
-
-  moveLeftWord() {
-    const prevWordStart = this.findNextWordPosition("left");
-
-    this.#setCursorPosition(prevWordStart);
+    this.#setCursorPosition(wordStart);
   }
 
   #getSelectedText() {
