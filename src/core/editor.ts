@@ -19,8 +19,6 @@ type DeleteDirectionType = keyof typeof DeleteDirection;
 
 class TextEditor {
   private value: string;
-  private selectionStart: number;
-  private selectionEnd: number;
   private direction: MovingDirection;
   private textArea: HTMLTextAreaElement;
   private setTextWithCursorPosition: (
@@ -31,10 +29,16 @@ class TextEditor {
   constructor(args: PerformRemapActionArgs) {
     this.textArea = args.textareaRef;
     this.value = args.textareaRef.value;
-    this.selectionStart = args.textareaRef.selectionStart;
-    this.selectionEnd = args.textareaRef.selectionEnd;
     this.direction = useGlobalStore.getState().direction;
     this.setTextWithCursorPosition = args.setTextWithCursorPosition;
+  }
+
+  get selectionStart() {
+    return this.textArea.selectionStart;
+  }
+
+  get selectionEnd() {
+    return this.textArea.selectionEnd;
   }
 
   #updateDirection(newdirection: MovingDirection) {
