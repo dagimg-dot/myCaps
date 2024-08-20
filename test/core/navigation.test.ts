@@ -1,12 +1,9 @@
 import { describe, it, beforeEach, expect, vi, afterEach } from "vitest";
 import TextEditor from "../../src/core/editor";
-import clipboard from "../../src/core/clipboard";
 
-describe("TextEditor", () => {
+describe("Navigation", () => {
   let textArea: HTMLTextAreaElement;
   let editor: TextEditor;
-  let mockSelectedText = "";
-  let setMockSelection: (start: number, end: number) => void;
   let setCursorPosition: (position: number) => void;
 
   beforeEach(() => {
@@ -15,11 +12,6 @@ describe("TextEditor", () => {
 second line
 third line`;
     document.body.appendChild(textArea);
-
-    setMockSelection = (start: number, end: number) => {
-      mockSelectedText = textArea.value.substring(start, end);
-      textArea.setSelectionRange(start, end);
-    };
 
     setCursorPosition = (position: number) => {
       textArea.setSelectionRange(position, position);
@@ -34,42 +26,6 @@ third line`;
         textArea.selectionEnd = cursorPosition;
       },
     });
-
-    // getCurrentLine() is a private method, so we need to mock it
-
-    // Mock window.getSelection()
-    // This is because the window.getSelection() method used in the clipboard.ts
-    // file is not available in the test environment
-    vi.spyOn(window, "getSelection").mockImplementation(
-      () =>
-        ({
-          toString: () => mockSelectedText,
-          removeAllRanges: vi.fn(),
-          addRange: vi.fn(),
-          anchorNode: textArea,
-        } as unknown as Selection)
-    );
-  });
-
-  it("should select all text", () => {
-    editor.selectAll();
-    expect(textArea.selectionStart).toBe(0);
-    expect(textArea.selectionEnd).toBe(textArea.value.length);
-  });
-
-  it("should cut text and delete it from the textarea", () => {
-    setMockSelection(0, 5); // Mock selection
-
-    // Remove the selected text from the textarea to make the test more realistic
-    const newText = textArea.value.replace(mockSelectedText, "");
-    editor.cut();
-    expect(textArea.value).toBe(newText);
-  });
-
-  it("should cut text and store it in the clipboard", () => {
-    setMockSelection(0, 5); // Mock selection
-    editor.cut();
-    expect(clipboard.getHistory()).toContain(mockSelectedText);
   });
 
   it("should move the cursor one character to the left (capslock + j)", () => {
@@ -135,19 +91,19 @@ third line`;
     setCursorPosition(curPos);
 
     editor.moveByWord("right");
-    
+
     expect(textArea.selectionStart).toBe(nextWordStart);
     expect(textArea.selectionEnd).toBe(nextWordStart);
   });
-  
+
   it("should move to the end of the line if the word is the last word in the line", () => {
     const word = "line";
     const curPos = textArea.value.indexOf(word);
     const nextWordStart = textArea.value.indexOf(word) + word.length;
     setCursorPosition(curPos);
-    
+
     editor.moveByWord("right");
-    
+
     expect(textArea.selectionStart).toBe(nextWordStart);
     expect(textArea.selectionEnd).toBe(nextWordStart);
   });
@@ -157,21 +113,21 @@ third line`;
     const curPos = textArea.value.indexOf(word) + word.length;
     const nextLineStart = textArea.value.indexOf(word) + word.length + 1;
     setCursorPosition(curPos);
-    
+
     editor.moveByWord("right");
-    
+
     expect(textArea.selectionStart).toBe(nextLineStart);
     expect(textArea.selectionEnd).toBe(nextLineStart);
   });
-  
+
   it("should move to the end of the previous word (capslock + e + j)", () => {
     const word = "line";
     const curPos = textArea.value.indexOf(word) + 2;
     const prevWordStart = textArea.value.indexOf(word) - 1;
     setCursorPosition(curPos);
-    
+
     editor.moveByWord("left");
-    
+
     expect(textArea.selectionStart).toBe(prevWordStart);
     expect(textArea.selectionEnd).toBe(prevWordStart);
   });
@@ -181,9 +137,9 @@ third line`;
     const curPos = textArea.value.indexOf(word) + 3;
     const prevWordStart = textArea.value.indexOf(word);
     setCursorPosition(curPos);
-    
+
     editor.moveByWord("left");
-    
+
     expect(textArea.selectionStart).toBe(prevWordStart);
     expect(textArea.selectionEnd).toBe(prevWordStart);
   });
@@ -201,7 +157,6 @@ third line`;
   });
 
   afterEach(() => {
-    clipboard.clear();
     document.body.removeChild(textArea);
     vi.restoreAllMocks();
   });
