@@ -18,7 +18,7 @@ type MoveDirectionType = keyof typeof MoveDirection;
 type DeleteDirectionType = keyof typeof DeleteDirection;
 
 class TextEditor {
-  private value: string;
+  // private value: string;
   private direction: MovingDirection;
   private textArea: HTMLTextAreaElement;
   private setTextWithCursorPosition: (
@@ -28,7 +28,7 @@ class TextEditor {
 
   constructor(args: PerformRemapActionArgs) {
     this.textArea = args.textareaRef;
-    this.value = args.textareaRef.value;
+    // this.value = args.textareaRef.value;
     this.direction = useGlobalStore.getState().direction;
     this.setTextWithCursorPosition = args.setTextWithCursorPosition;
   }
@@ -39,6 +39,10 @@ class TextEditor {
 
   get selectionEnd() {
     return this.textArea.selectionEnd;
+  }
+
+  get value() {
+    return this.textArea.value;
   }
 
   #updateDirection(newdirection: MovingDirection) {
@@ -227,6 +231,19 @@ class TextEditor {
     const wordStart = this.findNextWordPosition(direction);
 
     this.#setCursorPosition(wordStart);
+  }
+
+  deleteWord(direction: MovingDirection) {
+    const wordBoundary = this.findNextWordPosition(direction!);
+
+    const isForward = direction === "right";
+    const start = isForward ? this.selectionStart : wordBoundary;
+    const end = isForward ? wordBoundary : this.selectionEnd;
+
+    const newText = this.value.slice(0, start) + this.value.slice(end);
+    const newCursorPosition = isForward ? this.selectionStart : wordBoundary;
+
+    this.setTextWithCursorPosition(newText, newCursorPosition);
   }
 
   #getSelectedText() {

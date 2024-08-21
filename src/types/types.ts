@@ -15,6 +15,8 @@ export enum RemapAction {
   MoveLeftWord = "Move Left Word",
   SelectLetterRight = "Select Letter Right",
   SelectLetterLeft = "Select Letter Left",
+  DeleteWordRight = "Delete Word Right",
+  DeleteWordLeft = "Delete Word Left",
 }
 
 export interface GlobalState {

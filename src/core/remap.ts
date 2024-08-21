@@ -22,6 +22,8 @@ const remapActionMap: Record<string, RemapAction> = {
   ej: RemapAction.MoveLeftWord,
   shiftl: RemapAction.SelectLetterRight, // Not tested
   shiftj: RemapAction.SelectLetterLeft, // Not tested
+  en: RemapAction.DeleteWordLeft,
+  em: RemapAction.DeleteWordRight, // Not tested
 };
 
 export function performRemapAction(args: PerformRemapActionArgs): void {
@@ -44,6 +46,8 @@ export function performRemapAction(args: PerformRemapActionArgs): void {
     [RemapAction.MoveLeftWord]: () => textEditor.moveByWord("left"),
     [RemapAction.SelectLetterLeft]: () => textEditor.selectLetterLeft(),
     [RemapAction.SelectLetterRight]: () => textEditor.selectLetterRight(),
+    [RemapAction.DeleteWordRight]: () => textEditor.deleteWord("right"),
+    [RemapAction.DeleteWordLeft]: () => textEditor.deleteWord("left"),
   };
 
   // Execute the action if it exists in the map
