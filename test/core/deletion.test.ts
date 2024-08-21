@@ -31,15 +31,16 @@ third line`;
   it("should delete the word to the left of the cursor (capslock + e + n)", () => {
     const word = "line";
     const curPos = textArea.value.indexOf(word) + word.length;
-    const wordStart = textArea.value.indexOf(word);
+    const wordStart = textArea.value.indexOf(word) - 1;
     setCursorPosition(curPos);
 
     editor.deleteWord("left");
 
-    expect(textArea.value).toBe(
+    const expectedText =
       textArea.value.substring(0, wordStart) +
-        textArea.value.substring(textArea.selectionEnd)
-    );
+      textArea.value.substring(textArea.selectionEnd);
+
+    expect(textArea.value).toBe(expectedText);
     expect(textArea.selectionStart).toBe(wordStart);
     expect(textArea.selectionEnd).toBe(wordStart);
   });
@@ -50,7 +51,7 @@ second line
 third line`;
     const word = "second";
     const curPos = textArea.value.indexOf(word) + word.length + 14;
-    const wordStart = textArea.value.indexOf(word) + word.length + 1;
+    const wordStart = textArea.value.indexOf(word) + word.length;
     setCursorPosition(curPos);
 
     editor.deleteWord("left");
