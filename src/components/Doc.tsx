@@ -11,14 +11,22 @@ function Heading2({ children }: { children: React.ReactNode }) {
 function KeyGroup({
   title,
   children,
+  cols = 4,
 }: {
   title: string;
   children: React.ReactNode;
+  cols?: number;
 }) {
   return (
     <div className="mb-6">
       <h3 className="text-lg font-semibold mb-2 text-violet-400">{title}</h3>
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">{children}</div>
+      <div
+        className={`grid ${
+          cols > 1 ? "grid-cols-2" : ""
+        } gap-4 sm:grid-cols-${cols}`}
+      >
+        {children}
+      </div>
     </div>
   );
 }
@@ -111,18 +119,51 @@ function Doc() {
           <Key keyName="M" action="Delete" />
         </KeyGroup>
 
-        <KeyGroup title="Right Hand (Middle Finger)">
+        <KeyGroup title="Right Hand (Middle Finger) - Not Implemented">
           <Key keyName="," action="Undo" />
           <Key keyName="." action="Redo" />
+        </KeyGroup>
+
+        <KeyGroup title="Press 'E' with your left hand middle finger" cols={2}>
+          <Key keyName="L" action="Move one word to the right" />
+          <Key keyName="J" action="Move one word to the left" />
+          <Key keyName="N" action="Delete one word to the left" />
+          <Key keyName="M" action="Delete one word to the right" />
+        </KeyGroup>
+
+        <KeyGroup
+          title="Press 'Shift' with your right hand pinky finger"
+          cols={2}
+        >
+          <Key keyName="L" action="Select one word to the right" />
+          <Key keyName="J" action="Select one word to the left" />
         </KeyGroup>
       </div>
 
       <p className="mt-6">
-        This layout is designed for efficiency. The left hand controls common
-        text operations, while the right hand manages cursor movement and text
-        editing. It's all about keeping your hands on the home row and
-        minimizing unnecessary movements.
+        This layout is what I use everyday for all my text editing needs
+        including writing docs, code(with VIM), chatting, etc.
       </p>
+
+      <p className="my-6">
+        Aside from text editing, CapsLock is my go-to modifier key for a lot of
+        things. Let me show you some of them.
+      </p>
+
+      <KeyGroup title="Other Combinations I use" cols={0}>
+        <Key keyName="CapsLock + 8" action="Refresh (F5/Ctrl+R)" />
+        <Key
+          keyName="CapsLock + 0"
+          action="Format Code (Alt+Shift+F) in VSCode"
+        />
+        <Key
+          keyName="CapsLock + 2/3"
+          action="Navigate to Next/Previous Workspace"
+        />
+        <Key keyName="CapsLock + /" action="Comment/Uncomment in VSCode" />
+        <Key keyName="CapsLock + E + F" action="Search in VSCode" />
+        <Key keyName="CapsLock + ]" action="Open Cliboard History" />
+      </KeyGroup>
     </div>
   );
 }
