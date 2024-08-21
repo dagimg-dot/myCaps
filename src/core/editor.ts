@@ -287,6 +287,61 @@ class TextEditor {
     this.textArea.setSelectionRange(newStart, newEnd);
   }
 
+  #deselectWord() {
+    // Determine the original start and end of the selection based on the direction
+    const isForward = this.direction === "right";
+    const start = isForward
+      ? this.selectionStart
+      : this.findNextWordPosition("left");
+    const end = isForward
+      ? this.findNextWordPosition("right")
+      : this.selectionEnd;
+
+    // Adjust the selection range by reducing the current selection by one word in the given direction
+    this.textArea.setSelectionRange(start, end);
+  }
+
+  selectWordLeft() {
+    // Check if there's a current selection and the direction is "right"
+    if (this.#getSelectedText() !== "" && this.direction === "right") {
+      // Deselect the current selection to the right
+      this.#deselectWord();
+      return;
+    }
+
+    // Update the direction to "left"
+    this.#updateDirection("left");
+
+    // Find the next word position to the left
+    const nextWordPosition = this.findNextWordPosition("left");
+
+    // Set the new selection range from the word boundary to the current selection end
+    this.textArea.setSelectionRange(nextWordPosition, this.selectionEnd);
+  }
+
+  selectWordRight() {
+    // Check if there's a current selection and the direction is "left"
+    if (this.#getSelectedText() !== "" && this.direction === "left") {
+      // Deselect the current selection to the left
+      this.#deselectWord();
+      return;
+    }
+
+    // Update the direction to "right"
+    this.#updateDirection("right");
+
+    // Find the next word position to the right
+    const nextWordPosition = this.findNextWordPosition("right");
+    this.textArea.setSelectionRange(this.selectionStart, nextWordPosition);
+    const nextWordPosition2 = this.findNextWordPosition("right");
+
+    console.log("nextWordPosition", nextWordPosition);
+    console.log("nextWordPosition2", nextWordPosition2);
+
+    // Set the new selection range from the current selection start to the word boundary
+    this.textArea.setSelectionRange(this.selectionStart, nextWordPosition2);
+  }
+
   deleteLetter(direction: DeleteDirectionType) {
     if (this.#getSelectedText() === this.value) {
       this.setTextWithCursorPosition("", this.selectionStart);
